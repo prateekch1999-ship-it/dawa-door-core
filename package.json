@@ -1,12 +1,14 @@
 {
   "name": "@dawa-door/core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Design tokens shared by the Dawa Door user, shop and rider apps.",
   "license": "UNLICENSED",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
