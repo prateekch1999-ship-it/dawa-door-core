@@ -23,6 +23,54 @@ Pin a tag, not a branch — an app should move to new tokens deliberately, not w
 pushes. npm runs `prepare` on install, so the consumer gets the compiled `dist/` without this repo
 publishing anywhere.
 
+## Adding or changing a token
+
+In this repository:
+
+```bash
+# edit src/, then
+npm test                    # builds and runs the contrast suite
+git commit -am "feat: the Pro type scale for the shop and rider apps"
+npm version minor           # bumps package.json, commits, tags v0.2.0
+git push --follow-tags
+```
+
+In each app that wants it:
+
+```bash
+npm install github:prateekch1999-ship-it/dawa-door-core#v0.2.0
+npm run verify
+```
+
+Apps move between tags one at a time and on purpose. The user app can sit on v0.1.0 while the shop
+app is on v0.2.0 — that is the point of pinning, not a problem to fix.
+
+**Never move a published tag.** npm caches git dependencies by ref, so re-pointing `v0.2.0` at a new
+commit leaves some machines on the old code and others on the new, with nothing to show why. Cut
+`v0.2.1` instead.
+
+Patch for a fix, minor for a new token, major for a rename or removal — a removed token breaks three
+apps at once, so it should be loud.
+
+### Working on a token and an app at the same time
+
+Tagging for every experiment is miserable. Point the app at the local checkout while you iterate:
+
+```bash
+npm install ../dawa-door-core      # in the app
+```
+
+Then put the tag back before you commit. A `file:` or relative path in an app's package.json builds
+on your machine and nowhere else — not on a teammate's, and not on EAS.
+
+## Why not a git submodule
+
+A submodule puts the *files* at a path; it does not make `@dawa-door/core` resolve, so each app ends
+up with a relative-path dependency or Metro `watchFolders` on top of it anyway. In exchange it pins
+to a commit rather than a version, needs `--recurse-submodules` on every clone and extra setup on
+EAS, and invites editing shared code from inside one app — which is the exact drift this package
+exists to prevent.
+
 ## Dependency-free on purpose
 
 No React Native import, not even for types. `BoxShadow` and `TextToken` are declared locally and are
