@@ -32,6 +32,19 @@ export const FontFamily = {
 } as const;
 
 /**
+ * Noto Sans Devanagari, for Hindi copy.
+ *
+ * Medicine names stay in Latin in both languages — they are read off the pack,
+ * and transliterating them would be a dispensing error waiting to happen.
+ */
+export const FontFamilyDevanagari = {
+  medium: 'NotoSansDevanagari_500Medium',
+  semiBold: 'NotoSansDevanagari_600SemiBold',
+  bold: 'NotoSansDevanagari_700Bold',
+  extraBold: 'NotoSansDevanagari_800ExtraBold',
+} as const;
+
+/**
  * letterSpacing is in points here, converted from the design's em values —
  * -0.02em on display-l at 28 pt is -0.56.
  */
@@ -66,3 +79,55 @@ export const Typography = {
 } satisfies Record<string, TextToken>;
 
 export type TypographyVariant = keyof typeof Typography;
+
+/**
+ * The same scale in Devanagari. Sizes are identical so the two languages lay
+ * out the same, with +4 line height on body and secondary where the taller
+ * glyphs and their matras need the room.
+ *
+ * `satisfies` against TypographyVariant means a variant added above without a
+ * Hindi counterpart fails to compile rather than silently falling back to a
+ * Latin face.
+ */
+export const TypographyDevanagari = {
+  displayL: {
+    fontFamily: FontFamilyDevanagari.extraBold,
+    fontSize: 28,
+    lineHeight: 32,
+    letterSpacing: -0.56,
+  },
+  display: {
+    fontFamily: FontFamilyDevanagari.extraBold,
+    fontSize: 24,
+    lineHeight: 28,
+    letterSpacing: -0.48,
+  },
+  heading: {
+    fontFamily: FontFamilyDevanagari.bold,
+    fontSize: 20,
+    lineHeight: 24,
+    letterSpacing: -0.2,
+  },
+  title: { fontFamily: FontFamilyDevanagari.bold, fontSize: 16, lineHeight: 24 },
+  body: { fontFamily: FontFamilyDevanagari.medium, fontSize: 16, lineHeight: 28 },
+  secondary: { fontFamily: FontFamilyDevanagari.medium, fontSize: 14, lineHeight: 24 },
+  caption: {
+    fontFamily: FontFamilyDevanagari.semiBold,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 0.12,
+  },
+  amount: {
+    fontFamily: FontFamilyDevanagari.extraBold,
+    fontSize: 20,
+    lineHeight: 24,
+    fontVariant: ['tabular-nums'],
+  },
+  code: {
+    fontFamily: FontFamilyDevanagari.extraBold,
+    fontSize: 40,
+    lineHeight: 44,
+    letterSpacing: 6.4,
+    fontVariant: ['tabular-nums'],
+  },
+} satisfies Record<TypographyVariant, TextToken>;
